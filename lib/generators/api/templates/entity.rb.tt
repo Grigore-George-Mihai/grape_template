@@ -1,0 +1,18 @@
+# frozen_string_literal: true
+
+module <%= version.camelize %>
+  module Entities
+    class <%= class_name %>Entity < BaseEntity
+      root "<%= file_name.pluralize %>", "<%= file_name.singularize %>"
+
+      expose :id, documentation: { type: "Integer", desc: "<%= class_name %> ID" }
+      <%- attributes.each do |attribute| -%>
+      expose :<%= attribute.name %>, documentation: { type: "<%= attribute_type_for_grape(attribute.type) %>", desc: "<%= class_name %> <%= attribute.name.capitalize %>" }
+      <%- end -%>
+
+      # Timestamps
+      expose :created_at, documentation: { type: "String", desc: "Creation timestamp" }, format_with: :iso_timestamp
+      expose :updated_at, documentation: { type: "String", desc: "Last update timestamp" }, format_with: :iso_timestamp
+    end
+  end
+end

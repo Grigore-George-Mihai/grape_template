@@ -1,0 +1,111 @@
+# frozen_string_literal: true
+
+require "rails_helper"
+
+RSpec.describe <%= version.camelize %>::Resources::<%= class_name.pluralize %>, type: :request do
+  let!(:<%= file_name.pluralize %>) { create_list(:<%= file_name %>, 3) }
+  let(:<%= file_name %>) { <%= file_name.pluralize %>.first }
+  let(:<%= file_name %>_id) { <%= file_name %>.id }
+
+  describe "GET /api/<%= version %>/<%= file_name.pluralize %>" do
+    before { get "/api/<%= version %>/<%= file_name.pluralize %>" }
+
+    it "returns a list of <%= file_name.pluralize %>" do
+      expect(response).to have_http_status(:ok)
+      expect(response_body[:<%= file_name.pluralize %>].size).to eq(3)
+    end
+  end
+
+  describe "GET /api/<%= version %>/<%= file_name.pluralize %>/:id" do
+    before { get "/api/<%= version %>/<%= file_name.pluralize %>/#{<%= file_name %>_id}" }
+
+    context "when the record exists" do
+      it "returns the <%= file_name.singularize %>" do
+        expect(response).to have_http_status(:ok)
+        expect(response_body[:<%= file_name.singularize %>][:id]).to eq(<%= file_name %>_id)
+        <%- attributes.each do |attribute| -%>
+        expect(response_body[:<%= file_name.singularize %>][:<%= attribute.name %>]).to eq(<%= file_name %>.<%= attribute.name %>)
+        <%- end -%>
+      end
+    end
+
+    context "when the record does not exist" do
+      let(:<%= file_name %>_id) { 0 }
+
+      it "returns a not found error message" do
+        expect(response).to have_http_status(:not_found)
+        expect(response_body[:errors][:status]).to eq("Not Found")
+      end
+    end
+  end
+
+  describe "POST /api/<%= version %>/<%= file_name.pluralize %>" do
+    let(:valid_attributes) do
+      {
+        <%- attributes.each do |attribute| -%>
+        <%= attribute.name %>: <%= default_value_for(attribute, :create) %>,
+        <%- end -%>
+      }
+    end
+
+    context "when the request is valid" do
+      before { post "/api/<%= version %>/<%= file_name.pluralize %>", params: valid_attributes }
+
+      it "creates a new <%= file_name.singularize %>" do
+        expect(response).to have_http_status(:created)
+        expect(response_body[:<%= file_name.singularize %>].symbolize_keys).to include(valid_attributes)
+      end
+    end
+
+    context "when the request is invalid" do
+      before { post "/api/<%= version %>/<%= file_name.pluralize %>", params: { <%= attributes.first.name %>: nil } }
+
+      it "returns a validation failure message" do
+        expect(response).to have_http_status(:bad_request)
+        expect(response_body[:errors][:status]).to eq("Bad Request")
+      end
+    end
+  end
+
+  describe "PUT /api/<%= version %>/<%= file_name.pluralize %>/:id" do
+    let(:valid_attributes) do
+      {
+        <%- attributes.each do |attribute| -%>
+        <%= attribute.name %>: <%= default_value_for(attribute, :update) %>,
+        <%- end -%>
+      }
+    end
+
+    context "when the record exists" do
+      before { put "/api/<%= version %>/<%= file_name.pluralize %>/#{<%= file_name %>_id}", params: valid_attributes }
+
+      it "updates the record" do
+        expect(response).to have_http_status(:ok)
+        expect(response_body[:<%= file_name.singularize %>].symbolize_keys).to include(valid_attributes)
+      end
+    end
+
+    context "when the record does not exist" do
+      let(:<%= file_name %>_id) { 0 }
+
+      before { put "/api/<%= version %>/<%= file_name.pluralize %>/#{<%= file_name %>_id}", params: valid_attributes }
+
+      it "returns a not found error message" do
+        expect(response).to have_http_status(:not_found)
+        expect(response_body[:errors][:status]).to eq("Not Found")
+      end
+    end
+  end
+
+  describe "DELETE /api/<%= version %>/<%= file_name.pluralize %>/:id" do
+    before { delete "/api/<%= version %>/<%= file_name.pluralize %>/#{<%= file_name %>_id}" }
+
+    it "deletes the <%= file_name.singularize %>" do
+      expect(response).to have_http_status(:no_content)
+    end
+
+    it "returns status code 204" do
+      expect(response.status).to eq(204)
+    end
+  end
+end

@@ -1,0 +1,64 @@
+# frozen_string_literal: true
+
+module <%= version.camelize %>
+  module Resources
+    class <%= class_name.pluralize %> < Grape::API
+      resources :<%= file_name.pluralize %> do
+        desc "Return a paginated list of <%= file_name.pluralize %>"
+        params do
+          optional :page, type: Integer, desc: "Page number"
+          optional :per_page, type: Integer, desc: "Number of <%= file_name.pluralize %> per page"
+        end
+        get do
+          <%= file_name.pluralize %> = <%= class_name %>.page(params[:page]).per(params[:per_page])
+          present <%= file_name.pluralize %>, with: <%= version.camelize %>::Entities::<%= class_name %>Entity
+        end
+
+        desc "Return a specific <%= file_name.singularize %>"
+        params do
+          requires :id, type: Integer, desc: "<%= class_name %> ID"
+        end
+        route_param :id do
+          get do
+            <%= file_name.singularize %> = <%= class_name %>.find(params[:id])
+            present <%= file_name.singularize %>, with: <%= version.camelize %>::Entities::<%= class_name %>Entity
+          end
+        end
+
+        desc "Create a <%= file_name.singularize %>"
+        params do
+          <%- attributes.each do |attribute| -%>
+          requires :<%= attribute.name %>, type: <%= attribute_type_for_grape(attribute.type) %>, desc: "<%= class_name %> <%= attribute.name.capitalize %>"
+          <%- end -%>
+        end
+        post do
+          <%= file_name.singularize %> = <%= class_name %>.create!(declared(params))
+          present <%= file_name.singularize %>, with: <%= version.camelize %>::Entities::<%= class_name %>Entity
+        end
+
+        desc "Update a <%= file_name.singularize %>"
+        params do
+          requires :id, type: Integer, desc: "<%= class_name %> ID"
+          <%- attributes.each do |attribute| -%>
+          optional :<%= attribute.name %>, type: <%= attribute_type_for_grape(attribute.type) %>, desc: "<%= class_name %> <%= attribute.name.capitalize %>"
+          <%- end -%>
+        end
+        put ":id" do
+          <%= file_name.singularize %> = <%= class_name %>.find(params[:id])
+          <%= file_name.singularize %>.update!(declared(params, include_missing: false))
+          present <%= file_name.singularize %>, with: <%= version.camelize %>::Entities::<%= class_name %>Entity
+        end
+
+        desc "Delete a <%= file_name.singularize %>"
+        params do
+          requires :id, type: Integer, desc: "<%= class_name %> ID"
+        end
+        delete ":id" do
+          <%= file_name.singularize %> = <%= class_name %>.find(params[:id])
+          <%= file_name.singularize %>.destroy!
+          status 204
+        end
+      end
+    end
+  end
+end
