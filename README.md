@@ -99,13 +99,13 @@ rails generate api:grape <ResourceName> field:type field:type
 ```
 Replace <ResourceName> with the name of your resource (e.g., User) and field:type with the attributes and types (e.g., name:string age:integer).
 
-### Features
+#### Features
 - API Versioning: Supports --version option (default: v1).
 - Auto Mounting: Automatically mounts new resources in the API.
 - Swagger Integration: Adds entities to Swagger models.
 - Optional Model Generation: Prompts to generate the corresponding model.
 
-### Example
+#### Example
 
 ```bash
 rails generate api:grape User name:string age:integer description:text
