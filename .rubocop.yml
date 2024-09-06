@@ -60,3 +60,6 @@ Metrics/MethodLength:
 
 RSpec/MultipleExpectations:
   Max: 4
+
+RSpec/ExampleLength:
+  Max: 6

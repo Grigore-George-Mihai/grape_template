@@ -37,10 +37,6 @@ module Api
       inject_into_file file_path, after: "models: [" do
         "\n      #{version.camelize}::Entities::#{class_name}Entity,"
       end
-
-      # Run RuboCop on the modified file
-      # say("Running RuboCop on #{file_path}", :green)
-      # system("rubocop -A #{file_path}")
     end
 
     def ask_and_generate_model
