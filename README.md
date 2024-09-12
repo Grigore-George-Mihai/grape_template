@@ -26,7 +26,15 @@ git clone https://github.com/Grigore-George-Mihai/grape_template
 
 - Update the project name to reflect your application.
 - Modify the [Scout APM](https://github.com/scoutapp/scout_apm_ruby) settings as needed, or remove them if application performance monitoring is not required.
-- Rename `.env.development.template` to `.env.development` and `.env.test.template` to `.env.test`. Populate these files with the appropriate environment-specific variables.
+- Run the following rake task to create your environment files:
+    ```bash
+    rake env:setup
+    ````
+  - After running the task, open the newly created .env.development and .env.test files to modify them with the appropriate environment-specific variables as needed.
+- Create DB and seed:
+    ```bash
+    rails db:create db:migrate db:seed
+    ````
 
 ## Gems
 
@@ -77,13 +85,14 @@ git clone https://github.com/Grigore-George-Mihai/grape_template
 
 ## Rake Tasks
 
-Run the following rake task to check for security risks in your application:
+### Security Check
+- Run the following rake task to check for security risks in your application:
 
-```bash
-rake security:check
-```
+    ```bash
+    rake security:check
+    ```
 
-This task runs tools like Brakeman and Bundler Audit to ensure your application is secure.
+  - This task runs tools like Brakeman and Bundler Audit to ensure your application is secure.
 
 ## Grape API Generator
 
