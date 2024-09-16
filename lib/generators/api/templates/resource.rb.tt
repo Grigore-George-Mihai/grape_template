@@ -3,6 +3,10 @@
 module <%= version.camelize %>
   module Resources
     class <%= class_name.pluralize %> < Grape::API
+      before do
+        authenticate_request!
+      end
+
       resources :<%= file_name.pluralize %> do
         desc "Return a paginated list of <%= file_name.pluralize %>"
         params do

@@ -33,3 +33,6 @@ en:
     not_found: "Not Found"
     bad_request: "Bad Request"
     unprocessable_entity: "Unprocessable Entity"
+    messages:
+      invalid_email: 'must be a valid email address'
+      password_complexity: 'must include at least one special character (!@#$%^&*)'

@@ -117,13 +117,13 @@ Replace <ResourceName> with the name of your resource (e.g., User) and field:typ
 #### Example
 
 ```bash
-rails generate api:grape User name:string age:integer description:text
+rails generate api:grape Book titles:string description:text
 ```
 
 ##### This will create
-- A Grape resource in app/api/v1/resources/users.rb
-- A Grape entity in app/api/v1/entities/user_entity.rb
-- A corresponding RSpec test in spec/api/v1/resources/users_spec.rb
+- A Grape resource in app/api/v1/resources/books.rb
+- A Grape entity in app/api/v1/entities/book_entity.rb
+- A corresponding RSpec test in spec/api/v1/resources/books_spec.rb
 - The resource will be automatically mounted in the API
 - The entity will be added to Swagger documentation
 - The generator also gives you the option to create the User model with the specified attributes.

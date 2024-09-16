@@ -24,18 +24,27 @@ module Api
     end
 
     def mount_api
-      inject_into_file "app/api/#{version}/api.rb",
-                       after: "# Mount other endpoints - Used by generator do not delete\n" do
-        "    mount #{version.camelize}::Resources::#{class_name.pluralize}\n"
+      file_path = "app/api/#{version}/api.rb"
+      mount_line = "    mount #{version.camelize}::Resources::#{class_name.pluralize}\n"
+
+      # Only inject if the mount line is not already present
+      return if File.readlines(file_path).grep(/#{mount_line.strip}/).any?
+
+      inject_into_file file_path,
+                       after: "# Mount endpoints - Used by generator do not delete\n" do
+        mount_line
       end
     end
 
     def add_model_to_swagger
       file_path = "app/api/api_root.rb"
+      model_line = "      #{version.camelize}::Entities::#{class_name}Entity,"
 
-      # Inject the entity into the Swagger models array
+      # Inject the entity into the Swagger models array if it's not already there
+      return if File.readlines(file_path).grep(/#{model_line.strip}/).any?
+
       inject_into_file file_path, after: "models: [" do
-        "\n      #{version.camelize}::Entities::#{class_name}Entity,"
+        "\n#{model_line}"
       end
     end
 

@@ -55,11 +55,20 @@ Style/Documentation:
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
+Metrics/BlockLength:
+  Max: 35
+
 Metrics/MethodLength:
   Max: 15
+
+Layout/LineLength:
+  Max: 140
 
 RSpec/MultipleExpectations:
   Max: 4
 
 RSpec/ExampleLength:
+  Max: 6
+
+RSpec/MultipleMemoizedHelpers:
   Max: 6

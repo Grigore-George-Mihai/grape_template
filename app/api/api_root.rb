@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 class ApiRoot < Grape::API
-  # Mount the different versions
   mount V1::Api
-  mount V2::Api
 
   rescue_from ActiveRecord::RecordNotFound do |_exception|
     error!({ errors: { status: I18n.t("errors.not_found") } }, 404)
@@ -23,6 +21,19 @@ class ApiRoot < Grape::API
     hide_documentation_path: true,
     mount_path: "/swagger_doc",
     hide_format: true,
-    models: []
+    security_definitions: {
+      bearerAuth: {
+        type: "apiKey",
+        name: "Authorization",
+        in: "header",
+        description: "Enter JWT with Bearer prefix"
+      }
+    },
+    security: [
+      { bearerAuth: [] }
+    ],
+    models: [
+      V1::Entities::AuthEntity
+    ]
   )
 end
