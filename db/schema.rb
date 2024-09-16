@@ -14,4 +14,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_15_141915) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "users", force: :cascade do |t|
+    t.string "email", null: false
+    t.string "password_digest"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index "lower((email)::text)", name: "index_users_on_LOWER_email", unique: true
+  end
 end
