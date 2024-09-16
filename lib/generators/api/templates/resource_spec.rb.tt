@@ -2,15 +2,15 @@
 
 require "rails_helper"
 
-RSpec.describe V1::Resources::<%= class_name.pluralize %>, type: :request do
+RSpec.describe <%= version.camelize %>::Resources::<%= class_name.pluralize %>, type: :request do
   let!(:<%= file_name.pluralize %>) { create_list(:<%= file_name %>, 3) }
   let(:<%= file_name %>) { <%= file_name.pluralize %>.first }
   let(:<%= file_name %>_id) { <%= file_name %>.id }
   let(:user) { create(:user) }
   let(:headers) { authenticate_request(user) }
 
-  describe "GET /api/v1/<%= file_name.pluralize %>" do
-    before { get "/api/v1/<%= file_name.pluralize %>", headers: headers }
+  describe "GET /api/<%= version %>/<%= file_name.pluralize %>" do
+    before { get "/api/<%= version %>/<%= file_name.pluralize %>", headers: headers }
 
     it "returns a list of <%= file_name.pluralize %>" do
       expect(response).to have_http_status(:ok)
@@ -27,8 +27,8 @@ RSpec.describe V1::Resources::<%= class_name.pluralize %>, type: :request do
     end
   end
 
-  describe "GET /api/v1/<%= file_name.pluralize %>/:id" do
-    before { get "/api/v1/<%= file_name.pluralize %>/#{<%= file_name %>_id}", headers: headers }
+  describe "GET /api/<%= version %>/<%= file_name.pluralize %>/:id" do
+    before { get "/api/<%= version %>/<%= file_name.pluralize %>/#{<%= file_name %>_id}", headers: headers }
 
     context "when the record exists" do
       it "returns the <%= file_name.singularize %>" do
@@ -50,7 +50,7 @@ RSpec.describe V1::Resources::<%= class_name.pluralize %>, type: :request do
     end
   end
 
-  describe "POST /api/v1/<%= file_name.pluralize %>" do
+  describe "POST /api/<%= version %>/<%= file_name.pluralize %>" do
     let(:valid_attributes) do
       {
         <%- attributes.each do |attribute| -%>
@@ -60,7 +60,7 @@ RSpec.describe V1::Resources::<%= class_name.pluralize %>, type: :request do
     end
 
     context "when the request is valid" do
-      before { post "/api/v1/<%= file_name.pluralize %>", params: valid_attributes, headers: headers }
+      before { post "/api/<%= version %>/<%= file_name.pluralize %>", params: valid_attributes, headers: headers }
 
       it "creates a new <%= file_name.singularize %>" do
         expect(response).to have_http_status(:created)
@@ -69,7 +69,7 @@ RSpec.describe V1::Resources::<%= class_name.pluralize %>, type: :request do
     end
 
     context "when the request is invalid" do
-      before { post "/api/v1/<%= file_name.pluralize %>", params: { <%= attributes.first.name %>: nil }, headers: headers }
+      before { post "/api/<%= version %>/<%= file_name.pluralize %>", params: { <%= attributes.first.name %>: nil }, headers: headers }
 
       it "returns a validation failure message" do
         expect(response).to have_http_status(:bad_request)
@@ -78,7 +78,7 @@ RSpec.describe V1::Resources::<%= class_name.pluralize %>, type: :request do
     end
   end
 
-  describe "PUT /api/v1/<%= file_name.pluralize %>/:id" do
+  describe "PUT /api/<%= version %>/<%= file_name.pluralize %>/:id" do
     let(:valid_attributes) do
       {
         <%- attributes.each do |attribute| -%>
@@ -88,7 +88,7 @@ RSpec.describe V1::Resources::<%= class_name.pluralize %>, type: :request do
     end
 
     context "when the record exists" do
-      before { put "/api/v1/<%= file_name.pluralize %>/#{<%= file_name %>_id}", params: valid_attributes, headers: headers }
+      before { put "/api/<%= version %>/<%= file_name.pluralize %>/#{<%= file_name %>_id}", params: valid_attributes, headers: headers }
 
       it "updates the record" do
         expect(response).to have_http_status(:ok)
@@ -99,7 +99,7 @@ RSpec.describe V1::Resources::<%= class_name.pluralize %>, type: :request do
     context "when the record does not exist" do
       let(:<%= file_name %>_id) { 0 }
 
-      before { put "/api/v1/<%= file_name.pluralize %>/#{<%= file_name %>_id}", params: valid_attributes, headers: headers }
+      before { put "/api/<%= version %>/<%= file_name.pluralize %>/#{<%= file_name %>_id}", params: valid_attributes, headers: headers }
 
       it "returns a not found error message" do
         expect(response).to have_http_status(:not_found)
@@ -108,8 +108,8 @@ RSpec.describe V1::Resources::<%= class_name.pluralize %>, type: :request do
     end
   end
 
-  describe "DELETE /api/v1/<%= file_name.pluralize %>/:id" do
-    before { delete "/api/v1/<%= file_name.pluralize %>/#{<%= file_name %>_id}", headers: headers }
+  describe "DELETE /api/<%= version %>/<%= file_name.pluralize %>/:id" do
+    before { delete "/api/<%= version %>/<%= file_name.pluralize %>/#{<%= file_name %>_id}", headers: headers }
 
     it "deletes the <%= file_name.singularize %>" do
       expect(response).to have_http_status(:no_content)

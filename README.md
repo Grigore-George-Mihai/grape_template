@@ -117,7 +117,7 @@ Replace <ResourceName> with the name of your resource (e.g., User) and field:typ
 #### Example
 
 ```bash
-rails generate api:grape Book titles:string description:text
+rails generate api:grape Book title:string description:text
 ```
 
 ##### This will create
