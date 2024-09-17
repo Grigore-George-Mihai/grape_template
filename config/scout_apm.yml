@@ -1,0 +1,19 @@
+common: &defaults
+  monitor: true
+  log_level: debug
+  key: <%= ENV.fetch('SCOUT_KEY', nil) %>
+  name: <%= ENV.fetch('SCOUT_NAME', nil) %>
+
+production:
+  <<: *defaults
+
+development:
+  <<: *defaults
+  monitor: false
+
+test:
+  <<: *defaults
+  monitor: false
+
+staging:
+  <<: *defaults
