@@ -1,0 +1,10 @@
+Description:
+    This generator creates a Grape resource for the given model name.
+
+Example:
+    bin/rails generate grape_resource Book title:string description:text
+
+This will create:
+    - app/api/v1/resources/books.rb
+    - app/api/v1/entities/book_entity.rb
+    - spec/api/v1/resources/books_spec.rb

@@ -94,9 +94,9 @@ git clone https://github.com/Grigore-George-Mihai/grape_template
 
   - This task runs tools like Brakeman and Bundler Audit to ensure your application is secure.
 
-## Grape API Generator
+## Grape Resource Generator
 
-This repository includes a custom Rails generator for creating Grape API resources, entities, and corresponding RSpec tests. 
+This repository includes a custom Rails generator for creating Grape resources, entities, and corresponding RSpec tests. 
 The generator helps streamline the process of adding new API endpoints to your application.
 
 ### Usage
@@ -104,9 +104,9 @@ The generator helps streamline the process of adding new API endpoints to your a
 Generate a new Grape API resource:
 
 ```bash
-rails generate api:grape <ResourceName> field:type field:type
+rails generate grape_resource <ResourceName> field:type field:type
 ```
-Replace <ResourceName> with the name of your resource (e.g., User) and field:type with the attributes and types (e.g., name:string age:integer).
+Replace <ResourceName> with the name of your resource (e.g., Book) and field:type with the attributes and types (e.g., title:string description:text).
 
 #### Features
 - API Versioning: Supports --version option (default: v1).
@@ -117,7 +117,7 @@ Replace <ResourceName> with the name of your resource (e.g., User) and field:typ
 #### Example
 
 ```bash
-rails generate api:grape Book title:string description:text
+rails generate grape_resource Book title:string description:text
 ```
 
 ##### This will create
