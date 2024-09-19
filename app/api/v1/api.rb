@@ -8,17 +8,23 @@ module V1
 
     helpers do
       def authenticate_request!
-        token = request.headers["Authorization"]&.split&.last
+        token = extract_bearer_token
         decoded_token = JwtService.decode(token)
         error!("Unauthorized", 401) unless decoded_token
       end
 
       def current_user
-        token = request.headers["Authorization"]&.split&.last
+        token = extract_bearer_token
         decoded_token = JwtService.decode(token)
         @current_user ||= User.find(decoded_token[:user_id]) if decoded_token
       rescue ActiveRecord::RecordNotFound
         error!("Unauthorized", 401)
+      end
+
+      def extract_bearer_token
+        auth_header = request.headers["Authorization"]
+        error!("Invalid token format", 401) unless auth_header&.start_with?("Bearer ")
+        auth_header.split.last
       end
     end
 

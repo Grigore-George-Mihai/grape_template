@@ -3,14 +3,8 @@
 module V1
   module Entities
     class AuthEntity < BaseEntity
-      root "users", "user"
-
-      expose :id, documentation: { type: "Integer", desc: "User ID" }
-      expose :email, documentation: { type: "String", desc: "User Email" }
-
-      # Timestamps
-      expose :created_at, documentation: { type: "String", desc: "Creation timestamp" }, format_with: :iso_timestamp
-      expose :updated_at, documentation: { type: "String", desc: "Last update timestamp" }, format_with: :iso_timestamp
+      expose :token, documentation: { type: "String", desc: "JWT Token" }
+      expose :user, using: V1::Entities::UserEntity, documentation: { type: "UserEntity", desc: "User details" }
     end
   end
 end

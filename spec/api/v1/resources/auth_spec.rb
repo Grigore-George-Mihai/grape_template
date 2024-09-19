@@ -6,6 +6,8 @@ RSpec.describe V1::Resources::Auth, type: :request do
   describe "POST /api/v1/auth/signup" do
     let(:valid_params) do
       {
+        first_name: "John",
+        last_name: "Doe",
         email: "user@example.com",
         password: "Passw@rd1",
         password_confirmation: "Passw@rd1"
@@ -14,6 +16,8 @@ RSpec.describe V1::Resources::Auth, type: :request do
 
     let(:invalid_params) do
       {
+        first_name: "John",
+        last_name: "Doe",
         email: "user@example.com",
         password: "Passw@rd1",
         password_confirmation: "WrongPass"
@@ -25,6 +29,8 @@ RSpec.describe V1::Resources::Auth, type: :request do
         post "/api/v1/auth/signup", params: valid_params
         expect(response).to have_http_status(:created)
         expect(response_body[:user][:email]).to eq(valid_params[:email])
+        expect(response_body[:user][:first_name]).to eq(valid_params[:first_name])
+        expect(response_body[:user][:last_name]).to eq(valid_params[:last_name])
       end
     end
 
@@ -38,7 +44,10 @@ RSpec.describe V1::Resources::Auth, type: :request do
   end
 
   describe "POST /api/v1/auth/login" do
-    let!(:user) { create(:user, email: "user@example.com", password: "Passw@rd1", password_confirmation: "Passw@rd1") }
+    let!(:user) do
+      create(:user, first_name: "John", last_name: "Doe", email: "user@example.com", password: "Passw@rd1",
+                    password_confirmation: "Passw@rd1")
+    end
 
     let(:valid_login_params) do
       {
@@ -55,10 +64,13 @@ RSpec.describe V1::Resources::Auth, type: :request do
     end
 
     context "when the login credentials are valid" do
-      it "returns a JWT token" do
+      it "returns a JWT token and user data" do
         post "/api/v1/auth/login", params: valid_login_params
-        expect(response).to have_http_status(:ok) # Ensure this returns 200 OK
+        expect(response).to have_http_status(:ok)
         expect(response_body[:token]).not_to be_nil
+        expect(response_body[:user][:email]).to eq(user.email)
+        expect(response_body[:user][:first_name]).to eq(user.first_name)
+        expect(response_body[:user][:last_name]).to eq(user.last_name)
       end
     end
 

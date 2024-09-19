@@ -9,6 +9,7 @@ class User < ApplicationRecord
                     format: { with: URI::MailTo::EMAIL_REGEXP, message: I18n.t("errors.messages.invalid_email") }
   validates :password, presence: true, length: { minimum: 6 },
                        format: { with: /\A(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]+\z/, message: I18n.t("errors.messages.password_complexity") }
+  validates :first_name, :last_name, presence: true
 
   private
 

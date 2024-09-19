@@ -4,7 +4,7 @@ module V1
   module Resources
     class Auth < Grape::API
       resource :auth do
-        desc "User login and returns JWT token"
+        desc "User login and returns JWT token along with user information"
         params do
           requires :email, type: String, desc: "User email"
           requires :password, type: String, desc: "User password"
@@ -14,7 +14,7 @@ module V1
           if user&.authenticate(params[:password])
             token = JwtService.encode(user_id: user.id)
             status 200
-            { token: }
+            present({ token:, user: }, with: V1::Entities::AuthEntity)
           else
             error!("Invalid email or password", 401)
           end
@@ -22,19 +22,23 @@ module V1
 
         desc "User signup"
         params do
+          requires :first_name, type: String, desc: "User first name"
+          requires :last_name, type: String, desc: "User last name"
           requires :email, type: String, desc: "User email"
           requires :password, type: String, desc: "User password"
           requires :password_confirmation, type: String, desc: "User password confirmation"
         end
         post "/signup" do
           user = User.new(
+            first_name: params[:first_name],
+            last_name: params[:last_name],
             email: params[:email],
             password: params[:password],
             password_confirmation: params[:password_confirmation]
           )
 
           if user.save
-            present user, with: V1::Entities::AuthEntity
+            present user, with: V1::Entities::UserEntity
           else
             error!(user.errors.full_messages, 422)
           end
