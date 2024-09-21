@@ -50,6 +50,7 @@ git clone https://github.com/Grigore-George-Mihai/grape_template
 
 ### Background Processing
 - [Sidekiq](https://github.com/mperham/sidekiq): Efficient background processing for Ruby applications.
+- [Redis](https://github.com/redis/redis-rb): In-memory data structure store used by Sidekiq for managing background job queues, scheduling, and retries.
 
 ### Performance Monitoring
 - [Scout APM](https://github.com/scoutapp/scout_apm_ruby): Application monitoring tool.

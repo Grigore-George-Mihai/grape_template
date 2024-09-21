@@ -16,7 +16,7 @@ gem "sprockets-rails"
 gem "tzinfo-data", platforms: %i[windows jruby]
 
 # Grape
-gem "grape", "~> 2.1.3"
+gem "grape"
 gem "grape-entity"
 gem "grape-swagger"
 gem "grape-swagger-entity"
