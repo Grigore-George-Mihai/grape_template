@@ -7,7 +7,10 @@ RSpec.describe User, type: :model do
     # Validate presence and format of email
     it { is_expected.to validate_presence_of(:email) }
     it { is_expected.to allow_value("user@example.com").for(:email) }
-    it { is_expected.not_to allow_value("invalid_email").for(:email).with_message(I18n.t("errors.messages.invalid_email")) }
+
+    it {
+      expect(subject).not_to allow_value("invalid_email").for(:email).with_message(I18n.t("errors.messages.invalid_email"))
+    }
 
     # Validate case-insensitive uniqueness of email
     context "when validating uniqueness of email" do
