@@ -1,8 +1,20 @@
+require 'sidekiq/web'
+
+Sidekiq::Web.use Rack::Auth::Basic do |username, password|
+  username == ENV.fetch("SIDEKIQ_USERNAME", "admin") && password == ENV.fetch("SIDEKIQ_PASSWORD", "password")
+end
+
 Rails.application.routes.draw do
-  mount ApiRoot => '/'
+  mount ApiRoot => "/"
 
   if Rails.env.development? || Rails.env.staging?
-    mount GrapeSwaggerRails::Engine => '/swagger'
+    mount GrapeSwaggerRails::Engine => "/swagger"
+  end
+
+  if Rails.env.development? || Rails.env.production?
+    Sidekiq::Web.use ActionDispatch::Cookies
+    Sidekiq::Web.use ActionDispatch::Session::CookieStore, key: ENV.fetch("SIDEKIQ_SESSION_KEY", "_your_app_session")
+    mount Sidekiq::Web => "/sidekiq"
   end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -12,6 +24,4 @@ Rails.application.routes.draw do
   # Render dynamic PWA files from app/views/pwa/*
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-
-  # root "posts#index"
 end
