@@ -12,6 +12,7 @@ This repository serves as a default template for a Ruby on Rails (RoR) applicati
   - [Usage](#usage)
   - [Features](#features)
   - [Example](#example)
+- [Docker Setup](#docker-setup)
 - [Contact](#contact)
 
 ## Installation
@@ -121,6 +122,28 @@ rails generate grape_resource Book title:string description:text
 - The resource will be automatically mounted in the API
 - The entity will be added to Swagger documentation
 - The generator also gives you the option to create the User model with the specified attributes.
+
+## Docker Setup
+- If you prefer to run the application inside a Docker container, follow these steps:
+
+1. **Build the Docker image:**
+
+    ```bash
+    docker-compose build
+    ```
+
+2. **Start the Application and services:**
+
+    ```bash
+    docker-compose up
+    ```
+
+3. **Stop the Application:**
+
+    ```bash
+    docker-compose down
+    ```
+
 
 ## Contact
 For questions or further information, feel free to reach out via [LinkedIn](https://www.linkedin.com/in/grigore-george-mihai-73981b86/).
