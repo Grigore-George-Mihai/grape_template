@@ -19,8 +19,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_15_141915) do
     t.string "last_name", null: false
     t.string "email", null: false
     t.string "password_digest"
+    t.string "jti", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index "lower((email)::text)", name: "index_users_on_LOWER_email", unique: true
+    t.index ["jti"], name: "index_users_on_jti", unique: true
   end
 end

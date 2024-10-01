@@ -12,7 +12,7 @@ module V1
         post "/login" do
           user = User.find_by(email: params[:email])
           if user&.authenticate(params[:password])
-            token = JwtService.encode(user_id: user.id)
+            token = JwtService.encode(user_id: user.id, jti: user.jti)
             status 200
             present({ token:, user: }, with: V1::Entities::AuthEntity)
           else
@@ -42,6 +42,14 @@ module V1
           else
             error!(user.errors.full_messages, 422)
           end
+        end
+
+        desc "User logout and invalidates the current JWT token"
+        delete "/logout" do
+          authenticate_request!
+          current_user.regenerate_jti!
+          status 200
+          { message: "Logged out successfully" }
         end
       end
     end

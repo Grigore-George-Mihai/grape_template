@@ -7,11 +7,12 @@ class CreateUsers < ActiveRecord::Migration[7.2]
       t.string :last_name, null: false
       t.string :email, null: false
       t.string :password_digest
+      t.string :jti, null: false
 
       t.timestamps
     end
 
-    # Add a unique index to the email column to ensure uniqueness
     add_index :users, "LOWER(email)", unique: true
+    add_index :users, :jti, unique: true
   end
 end
