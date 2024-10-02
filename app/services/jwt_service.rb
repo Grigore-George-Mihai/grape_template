@@ -12,13 +12,13 @@ class JwtService
     body = JWT.decode(token, SECRET_KEY, true, algorithm: "HS256")[0]
     payload = ActiveSupport::HashWithIndifferentAccess.new(body)
 
-    raise "Invalid JTI in JWT token" unless valid_jti?(payload)
+    raise ErrorHandler::JwtVerificationError, "Invalid JTI in JWT token" unless valid_jti?(payload)
 
     payload
   rescue JWT::ExpiredSignature
-    raise "JWT token has expired"
+    raise ErrorHandler::JwtExpiredError
   rescue JWT::DecodeError => e
-    raise "JWT decode error: #{e.message}"
+    raise ErrorHandler::JwtDecodeError, e.message
   end
 
   def self.valid_jti?(payload)
