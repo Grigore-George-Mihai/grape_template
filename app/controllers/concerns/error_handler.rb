@@ -17,7 +17,7 @@ module ErrorHandler
       error!({ errors: { status: I18n.t("errors.unprocessable_entity"), code: 422 } }, 422)
     end
 
-    # Grape Validation errors
+    # Grape validation errors
     rescue_from Grape::Exceptions::ValidationErrors do |exception|
       error!({ errors: { status: I18n.t("errors.bad_request"), code: 400, message: exception.message } }, 400)
     end
@@ -38,7 +38,6 @@ module ErrorHandler
     # Catch-all for unexpected errors
     rescue_from :all do |e|
       Rollbar.error(e) if defined?(Rollbar)
-
       error!({ errors: { status: "Internal Server Error", message: e.message } }, 500)
     end
   end

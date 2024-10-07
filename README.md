@@ -48,7 +48,7 @@ git clone https://github.com/Grigore-George-Mihai/grape_template
 - [Grape Swagger Rails](https://github.com/ruby-grape/grape-swagger-rails): Integrates `grape-swagger` into Rails applications for serving Swagger UI.
 
 ### Pagination
-- [Kaminari](https://github.com/kaminari/kaminari): A scope and engine-based pagination library for Rails, Sinatra, and other Ruby frameworks.
+- [Pagy](https://github.com/ddnexus/pagy): A fast, efficient, and lightweight pagination gem for Rails, providing easy customization and flexibility with minimal overhead.
 
 ### Background Processing
 - [Sidekiq](https://github.com/mperham/sidekiq): Efficient background processing for Ruby applications.

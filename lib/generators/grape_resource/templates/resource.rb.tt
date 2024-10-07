@@ -14,18 +14,7 @@ module <%= version.camelize %>
           optional :per_page, type: Integer, desc: "Number of <%= file_name.pluralize %> per page"
         end
         get do
-          <%= file_name.pluralize %> = <%= class_name %>.page(params[:page]).per(params[:per_page])
-
-          result = {
-            <%= file_name.pluralize %>: <%= version.camelize %>::Entities::<%= class_name %>Entity.represent(<%= file_name.pluralize %>, root: false),
-            meta: {
-              current_page: <%= file_name.pluralize %>.current_page,
-              total_pages: <%= file_name.pluralize %>.total_pages,
-              total_count: <%= file_name.pluralize %>.total_count,
-              per_page: <%= file_name.pluralize %>.limit_value
-            }
-          }
-
+          result = paginated_response(<%= class_name %>.all, <%= version.camelize %>::Entities::<%= class_name %>Entity)
           present result
         end
 

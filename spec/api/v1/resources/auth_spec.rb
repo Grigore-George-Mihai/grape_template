@@ -44,10 +44,7 @@ RSpec.describe V1::Resources::Auth, type: :request do
   end
 
   describe "POST /api/v1/auth/login" do
-    let!(:user) do
-      create(:user, first_name: "John", last_name: "Doe", email: "user@example.com", password: "Passw@rd1",
-                    password_confirmation: "Passw@rd1")
-    end
+    let!(:user) { create(:user, email: "user@example.com", password: "Passw@rd1", password_confirmation: "Passw@rd1") }
 
     let(:valid_login_params) do
       {
@@ -84,10 +81,7 @@ RSpec.describe V1::Resources::Auth, type: :request do
   end
 
   describe "DELETE /api/v1/auth/logout" do
-    let!(:user) do
-      create(:user, first_name: "John", last_name: "Doe", email: "user@example.com", password: "Passw@rd1",
-                    password_confirmation: "Passw@rd1")
-    end
+    let!(:user) { create(:user, email: "user@example.com", password: "Passw@rd1", password_confirmation: "Passw@rd1") }
 
     let(:valid_login_params) do
       {

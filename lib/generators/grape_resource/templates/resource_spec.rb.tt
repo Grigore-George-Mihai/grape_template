@@ -18,11 +18,13 @@ RSpec.describe <%= version.camelize %>::Resources::<%= class_name.pluralize %>, 
     end
 
     it "includes pagination metadata" do
-      expect(response_body[:meta]).to include(
-        current_page: kind_of(Integer),
-        total_pages: kind_of(Integer),
-        total_count: kind_of(Integer),
-        per_page: kind_of(Integer)
+      expect(response_body[:pagy]).to include(
+        count: kind_of(Integer),
+        page: kind_of(Integer),
+        limit: kind_of(Integer),
+        pages: kind_of(Integer),
+        prev_url: anything,
+        next_url: anything
       )
     end
   end
