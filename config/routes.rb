@@ -1,4 +1,4 @@
-require 'sidekiq/web'
+require "sidekiq/web"
 
 Sidekiq::Web.use Rack::Auth::Basic do |username, password|
   username == ENV.fetch("SIDEKIQ_USERNAME", "admin") && password == ENV.fetch("SIDEKIQ_PASSWORD", "password")
@@ -7,9 +7,7 @@ end
 Rails.application.routes.draw do
   mount ApiRoot => "/"
 
-  if Rails.env.development? || Rails.env.staging?
-    mount GrapeSwaggerRails::Engine => "/swagger"
-  end
+  mount GrapeSwaggerRails::Engine => "/swagger" if Rails.env.development?
 
   if Rails.env.development? || Rails.env.production?
     Sidekiq::Web.use ActionDispatch::Cookies

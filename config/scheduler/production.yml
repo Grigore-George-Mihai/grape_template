@@ -1,0 +1,9 @@
+:scheduler:
+  :schedule:
+    capture_query_stats_job:
+      cron: "0 * * * *" # Runs every hour
+      class: "Pg::CaptureQueryStatsJob"
+
+    clear_query_stats_job:
+      cron: "0 0 * * 0" # Runs weekly on Sundays at midnight
+      class: "Pg::ClearQueryStatsJob"
