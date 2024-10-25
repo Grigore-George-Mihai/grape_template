@@ -10,23 +10,11 @@ module V1
       include Pagy::Backend
 
       def authenticate_request!
-        return @current_user if @current_user
-
-        token = extract_bearer_token
-        decoded_token = JwtService.decode(token)
-        @current_user = User.find(decoded_token[:user_id])
-      rescue ActiveRecord::RecordNotFound
-        error!("Unauthorized", 401)
+        @authenticate_request ||= JwtService.authenticate(request.headers)
       end
 
       def current_user
         authenticate_request!
-      end
-
-      def extract_bearer_token
-        auth_header = request.headers["Authorization"]
-        error!("Invalid token format", 401) unless auth_header&.start_with?("Bearer ")
-        auth_header.split.last
       end
 
       def paginated_response(collection, entity)

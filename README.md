@@ -26,8 +26,7 @@ git clone https://github.com/Grigore-George-Mihai/grape_template
 ## Customize
 
 - Update the project name to reflect your application.
-- Modify the [Scout APM](https://github.com/scoutapp/scout_apm_ruby) settings as needed, or remove it if performance tracking is not required.
-- Modify the [Rollbar](https://github.com/rollbar/rollbar-gem) settings as needed, or remove it if error tracking is not required.
+- Modify or remove the settings for [Scout APM](https://github.com/scoutapp/scout_apm_ruby) and [Rollbar](https://github.com/rollbar/rollbar-gem) as needed, based on your performance, error tracking, and database monitoring requirements.
 - Run the following rake task to create your environment files:
     ```bash
     rake env:setup
@@ -52,6 +51,7 @@ git clone https://github.com/Grigore-George-Mihai/grape_template
 
 ### Background Processing
 - [Sidekiq](https://github.com/mperham/sidekiq): Efficient background processing for Ruby applications.
+- [Sidekiq-Scheduler](https://github.com/moove-it/sidekiq-scheduler): Extends Sidekiq to support scheduled and recurring jobs using a simple configuration.
 - [Redis](https://github.com/redis/redis-rb): In-memory data structure store used by Sidekiq for managing background job queues, scheduling, and retries.
 
 ### Performance Monitoring

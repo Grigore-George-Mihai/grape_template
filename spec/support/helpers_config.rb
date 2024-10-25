@@ -2,7 +2,7 @@
 
 module HelpersConfig
   def sign_in(user)
-    post "/api/v1/auth/login", params: { email: user.email, password: "password123!" }
+    post "/api/v1/auth/login", params: { email: user.email, password: user.password }
     response_body["token"]
   end
 
