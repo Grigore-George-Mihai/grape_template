@@ -148,6 +148,12 @@ rails generate grape_resource Book title:string description:text
     docker-compose down
     ```
 
+4. **Remove named Volumes:**
+
+    ```bash
+    docker-compose down --volumes
+    ```
 
 ## Contact
+
 For questions or further information, feel free to reach out via [LinkedIn](https://www.linkedin.com/in/grigore-george-mihai-73981b86/).
