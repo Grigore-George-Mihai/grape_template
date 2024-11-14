@@ -3,7 +3,8 @@
 class User < ApplicationRecord
   has_secure_password
 
-  before_save :downcase_email
+  normalizes :email, with: ->(email) { email.strip.downcase }
+
   before_create :set_jti
 
   enum :role, { user: 0, admin: 1 }
@@ -20,11 +21,5 @@ class User < ApplicationRecord
 
   def regenerate_jti!
     update_column(:jti, SecureRandom.uuid)
-  end
-
-  private
-
-  def downcase_email
-    self.email = email.downcase
   end
 end
