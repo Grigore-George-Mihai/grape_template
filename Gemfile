@@ -29,7 +29,6 @@ gem "rollbar"
 gem "scout_apm"
 
 group :development, :test do
-  gem "byebug"
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
   gem "dotenv-rails"
 
@@ -39,7 +38,7 @@ group :development, :test do
   # Rspec
   gem "factory_bot_rails"
   gem "faker"
-  gem "rspec-rails", "~> 7.0.0"
+  gem "rspec-rails", "~> 7.1.0"
 
   # Security
   gem "brakeman", require: false
