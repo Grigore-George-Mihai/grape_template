@@ -30,9 +30,9 @@ RSpec.describe <%= version.camelize %>::Resources::<%= class_name.pluralize %>, 
   end
 
   describe "GET /api/<%= version %>/<%= file_name.pluralize %>/:id" do
-    before { get "/api/<%= version %>/<%= file_name.pluralize %>/#{<%= file_name %>_id}", headers: headers }
-
     context "when the record exists" do
+      before { get "/api/<%= version %>/<%= file_name.pluralize %>/#{<%= file_name %>_id}", headers: headers }
+
       it "returns the <%= file_name.singularize %>" do
         expect(response).to have_http_status(:ok)
         expect(response_body[:<%= file_name.singularize %>][:id]).to eq(<%= file_name %>_id)
@@ -43,7 +43,7 @@ RSpec.describe <%= version.camelize %>::Resources::<%= class_name.pluralize %>, 
     end
 
     context "when the record does not exist" do
-      let(:<%= file_name %>_id) { 0 }
+      before { get "/api/<%= version %>/<%= file_name.pluralize %>/0", headers: headers }
 
       it "returns a not found error message" do
         expect(response).to have_http_status(:not_found)
@@ -62,18 +62,21 @@ RSpec.describe <%= version.camelize %>::Resources::<%= class_name.pluralize %>, 
     end
 
     context "when the request is valid" do
-      before { post "/api/<%= version %>/<%= file_name.pluralize %>", params: valid_attributes, headers: headers }
-
       it "creates a new <%= file_name.singularize %>" do
+        expect {
+          post "/api/<%= version %>/<%= file_name.pluralize %>", params: valid_attributes, headers: headers
+        }.to change(<%= class_name %>, :count).by(1)
+
         expect(response).to have_http_status(:created)
-        expect(response_body[:<%= file_name.singularize %>].symbolize_keys).to include(valid_attributes)
       end
     end
 
     context "when the request is invalid" do
-      before { post "/api/<%= version %>/<%= file_name.pluralize %>", params: { <%= attributes.first.name %>: nil }, headers: headers }
+      it "does not create a new <%= file_name.singularize %> and returns a validation failure message" do
+        expect {
+          post "/api/<%= version %>/<%= file_name.pluralize %>", params: { <%= attributes.first.name %>: nil }, headers: headers
+        }.not_to change(<%= class_name %>, :count)
 
-      it "returns a validation failure message" do
         expect(response).to have_http_status(:bad_request)
         expect(response_body[:errors][:status]).to eq("Bad Request")
       end
@@ -90,20 +93,20 @@ RSpec.describe <%= version.camelize %>::Resources::<%= class_name.pluralize %>, 
     end
 
     context "when the record exists" do
-      before { put "/api/<%= version %>/<%= file_name.pluralize %>/#{<%= file_name %>_id}", params: valid_attributes, headers: headers }
-
       it "updates the record" do
+        put "/api/<%= version %>/<%= file_name.pluralize %>/#{<%= file_name %>_id}", params: valid_attributes, headers: headers
+
         expect(response).to have_http_status(:ok)
-        expect(response_body[:<%= file_name.singularize %>].symbolize_keys).to include(valid_attributes)
+        <%- attributes.each do |attribute| -%>
+        expect(<%= file_name %>.reload.<%= attribute.name %>).to eq(valid_attributes[:<%= attribute.name %>])
+        <%- end -%>
       end
     end
 
     context "when the record does not exist" do
-      let(:<%= file_name %>_id) { 0 }
-
-      before { put "/api/<%= version %>/<%= file_name.pluralize %>/#{<%= file_name %>_id}", params: valid_attributes, headers: headers }
-
       it "returns a not found error message" do
+        put "/api/<%= version %>/<%= file_name.pluralize %>/0", params: valid_attributes, headers: headers
+
         expect(response).to have_http_status(:not_found)
         expect(response_body[:errors][:status]).to eq("Not Found")
       end
@@ -111,14 +114,23 @@ RSpec.describe <%= version.camelize %>::Resources::<%= class_name.pluralize %>, 
   end
 
   describe "DELETE /api/<%= version %>/<%= file_name.pluralize %>/:id" do
-    before { delete "/api/<%= version %>/<%= file_name.pluralize %>/#{<%= file_name %>_id}", headers: headers }
+    context "when the record exists" do
+      it "deletes the <%= file_name.singularize %>" do
+        expect {
+          delete "/api/<%= version %>/<%= file_name.pluralize %>/#{<%= file_name %>_id}", headers: headers
+        }.to change(<%= class_name %>, :count).by(-1)
 
-    it "deletes the <%= file_name.singularize %>" do
-      expect(response).to have_http_status(:no_content)
+        expect(response).to have_http_status(:no_content)
+      end
     end
 
-    it "returns status code 204" do
-      expect(response.status).to eq(204)
+    context "when the record does not exist" do
+      it "returns a not found error message" do
+        delete "/api/<%= version %>/<%= file_name.pluralize %>/0", headers: headers
+
+        expect(response).to have_http_status(:not_found)
+        expect(response_body[:errors][:status]).to eq("Not Found")
+      end
     end
   end
 end

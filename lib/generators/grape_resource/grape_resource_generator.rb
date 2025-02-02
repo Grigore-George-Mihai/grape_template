@@ -76,7 +76,10 @@ class GrapeResourceGenerator < Rails::Generators::NamedBase
   end
 
   def attribute_type_for_grape(type)
-    type.to_s.downcase == "text" ? "String" : type.to_s.camelize
+    {
+      text: "String",
+      decimal: "Float"
+    }.fetch(type, type.to_s.camelize)
   end
 
   def default_value_for(attribute, context = :create)
