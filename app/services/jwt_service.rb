@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 class JwtService
-  SECRET_KEY = Rails.application.credentials.secret_key_base || ENV.fetch("SECRET_KEY_BASE") { raise "Secret key base not configured" }
+  SECRET_KEY = Rails.application.credentials.secret_key_base || ENV.fetch("SECRET_KEY_BASE") do
+    raise "Secret key base not configured"
+  end
 
   class << self
     def encode(payload, exp = 24.hours.from_now)
