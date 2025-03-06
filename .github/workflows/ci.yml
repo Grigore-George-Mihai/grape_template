@@ -54,7 +54,7 @@ jobs:
     env:
       RAILS_ENV: test
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
-      SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET || 'test_jwt_secret' }}
 
     steps:
       - name: Install packages

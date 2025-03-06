@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "rails_helper"
 
 RSpec.describe <%= version.camelize %>::Resources::<%= class_name.pluralize %>, type: :request do
