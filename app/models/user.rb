@@ -7,7 +7,7 @@ class User < ApplicationRecord
 
   before_create :set_jti
 
-  enum :role, { user: 0, admin: 1 }, validate: true
+  enum :role, %i[user admin], validate: true
 
   validates :email, presence: true, uniqueness: { case_sensitive: false },
                     format: { with: URI::MailTo::EMAIL_REGEXP, message: I18n.t("errors.messages.invalid_email") }
