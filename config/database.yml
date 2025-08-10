@@ -82,5 +82,5 @@ test:
 production:
   <<: *default
   database: grape_template_production
-  username: grape_template
-  password: <%= ENV["GRAPE_TEMPLATE_DATABASE_PASSWORD"] %>
+  username: <%= ENV["PROD_DATABASE_USERNAME"] %>
+  password: <%= ENV["PROD_DATABASE_PASSWORD"] %>
