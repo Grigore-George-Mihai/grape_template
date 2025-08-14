@@ -3,9 +3,8 @@
 class User < ApplicationRecord
   has_secure_password
 
-  normalizes :email, with: ->(email) { email.strip.downcase }
-
-  before_create :set_jti
+  normalizes :email, with: ->(email) { email.downcase.strip }
+  before_create -> { self.jti ||= SecureRandom.uuid }
 
   enum :role, %i[user admin], validate: true
 
@@ -14,10 +13,6 @@ class User < ApplicationRecord
   validates :password, presence: true, length: { minimum: 6 },
                        format: { with: /\A(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]+\z/, message: I18n.t("errors.messages.password_complexity") }
   validates :first_name, :last_name, presence: true
-
-  def set_jti
-    self.jti ||= SecureRandom.uuid
-  end
 
   def regenerate_jti!
     update_column(:jti, SecureRandom.uuid)
