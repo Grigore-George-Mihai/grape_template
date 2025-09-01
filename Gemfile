@@ -8,7 +8,6 @@ gem "pg", "~> 1.1"
 gem "puma", ">= 5.0"
 gem "rails", "~> 7.2"
 gem "redis"
-gem "sprockets-rails"
 gem "tzinfo-data", platforms: %i[windows jruby]
 
 # BackgroundJob and Scheduling
@@ -29,6 +28,7 @@ gem "scout_apm"
 group :development, :test do
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
   gem "dotenv-rails"
+  gem "sprockets-rails"
 
   # Code Quality & Linting
   gem "rubocop-rails-suite", require: false
@@ -41,12 +41,13 @@ group :development, :test do
   # Security
   gem "brakeman", require: false
   gem "bundler-audit", require: false
-end
 
-group :development do
   # Performance
   gem "bullet"
 end
+
+# group :development do
+# end
 
 group :test do
   gem "rspec-sidekiq"
