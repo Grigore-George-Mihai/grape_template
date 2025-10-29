@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class JwtService
-  JWT_SECRET = ENV.fetch("JWT_SECRET", nil)
+  JWT_SECRET = ENV.fetch("JWT_SECRET") { raise "JWT_SECRET is not set" }
 
   class << self
     def encode(payload, exp = 24.hours.from_now)

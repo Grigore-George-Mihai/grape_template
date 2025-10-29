@@ -3,62 +3,72 @@
 require "rails_helper"
 
 RSpec.describe User, type: :model do
-  let(:valid_user) { create(:user) }
-
   describe "validations" do
-    it { is_expected.to validate_presence_of(:email) }
-    it { is_expected.to allow_value("user@example.com").for(:email) }
-
-    it {
-      expect(valid_user).not_to allow_value("invalid_email").for(:email).with_message(I18n.t("errors.messages.invalid_email"))
-    }
-
-    context "when validating uniqueness of email" do
-      let(:user_with_email) { create(:user, email: "test@example.com") }
-
-      it "validates uniqueness of email case-insensitively" do
-        expect(user_with_email).to validate_uniqueness_of(:email).case_insensitive
-      end
+    %i[first_name last_name email password].each do |attribute|
+      it { is_expected.to validate_presence_of(attribute) }
     end
 
-    it { is_expected.to validate_presence_of(:password) }
+    it { is_expected.to have_secure_password }
     it { is_expected.to validate_length_of(:password).is_at_least(6) }
 
-    context "when the password lacks a special character" do
-      it "is invalid" do
-        user_without_special_char = build(:user, password: "Password1", password_confirmation: "Password1")
-        expect(user_without_special_char).not_to be_valid
-        expect(user_without_special_char.errors[:password]).to include(I18n.t("errors.messages.password_complexity"))
-      end
+    it "validates email format" do
+      user = build(:user, email: "invalid_email")
+      expect(user).not_to be_valid
+      expect(user.errors[:email]).to be_present
     end
 
-    context "when the password meets all requirements" do
-      it "is valid" do
-        expect(valid_user).to be_valid
-      end
+    describe "email uniqueness" do
+      subject { create(:user) }
+
+      it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
+    end
+
+    it "requires password to contain a special character" do
+      user = build(:user, password: "Password123", password_confirmation: "Password123")
+      expect(user).not_to be_valid
+
+      user.password = "Pass123!"
+      user.password_confirmation = "Pass123!"
+      expect(user).to be_valid
     end
   end
 
-  describe "Enums" do
-    it "defines roles with correct values" do
-      expect(described_class.roles).to eq("user" => 0, "admin" => 1)
+  describe "enums" do
+    it { is_expected.to define_enum_for(:role).with_values(user: 0, admin: 1) }
+  end
+
+  describe "email normalization" do
+    it "downcases and strips email before saving" do
+      unique_email = "  #{Faker::Internet.username.upcase}@EXAMPLE.COM  "
+      user = build(:user, email: unique_email)
+      user.save!
+      expect(user.email).to eq(unique_email.strip.downcase)
     end
   end
 
-  describe "jti handling" do
-    context "when a user is created" do
-      it "generates a unique jti" do
-        expect(valid_user.jti).to be_present
-        expect(valid_user.jti).to be_a(String)
-      end
+  describe "jti generation" do
+    it "generates jti on create when not set" do
+      user = build(:user, jti: nil)
+      user.save!
+      expect(user.jti).to be_present
     end
 
-    context "when a user's jti is regenerated" do
-      it "changes the jti value" do
-        old_jti = valid_user.jti
-        valid_user.regenerate_jti!
-        expect(valid_user.jti).not_to eq(old_jti)
-      end
+    it "preserves existing jti if already set" do
+      existing_jti = SecureRandom.uuid
+      user = build(:user, jti: existing_jti)
+      user.save!
+      expect(user.jti).to eq(existing_jti)
+    end
+  end
+
+  describe "#regenerate_jti!" do
+    it "updates jti to a new UUID" do
+      user = build(:user)
+      user.save!
+      original_jti = user.jti
+
+      user.regenerate_jti!
+      expect(user.reload.jti).not_to eq(original_jti)
     end
   end
 end
