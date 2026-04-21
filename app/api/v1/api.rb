@@ -37,5 +37,6 @@ module V1
 
     # Mount endpoints - Used by generator do not delete
     mount V1::Resources::Auth
+    mount V1::Resources::Users
   end
 end

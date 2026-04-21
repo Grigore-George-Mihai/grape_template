@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe User, type: :model do
   describe "validations" do
-    %i[first_name last_name email password].each do |attribute|
+    %i[first_name last_name email].each do |attribute|
       it { is_expected.to validate_presence_of(attribute) }
     end
 

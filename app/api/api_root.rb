@@ -23,7 +23,8 @@ class ApiRoot < Grape::API
       { bearerAuth: [] }
     ],
     models: [
-      V1::Entities::AuthEntity
+      V1::Entities::AuthEntity,
+      V1::Entities::UserEntity
     ]
   )
 end

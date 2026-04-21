@@ -9,9 +9,15 @@ class User < ApplicationRecord
 
   normalizes :email, with: ->(email) { email.downcase.strip }
 
-  validates :first_name, :last_name, :email, :password, presence: true
+  validates :first_name, :last_name, :email, presence: true
   validates :email, uniqueness: { case_sensitive: false }, format: { with: URI::MailTo::EMAIL_REGEXP }
-  validates :password, length: { minimum: 6 }, format: { with: /\A(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]+\z/, message: I18n.t("errors.messages.password_complexity") }
+  validates :password,
+            length: { minimum: 6, allow_blank: true },
+            format: {
+              with: /\A(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]+\z/,
+              message: I18n.t("errors.messages.password_complexity"),
+              allow_blank: true
+            }
 
   def regenerate_jti!
     update_column(:jti, SecureRandom.uuid)

@@ -30,10 +30,11 @@
 !/tmp/storage/
 !/tmp/storage/.keep
 
+# Ignore assets
 /public/assets
 
-# Ignore master key for decrypting credentials and more.
-/config/master.key
+# Ignore key files for decrypting credentials and more.
+/config/*.key
 
 # Ignore SimpleCov coverage reports
 /coverage/
@@ -70,3 +71,9 @@ Thumbs.db
 
 # Ignore Docker-related cache files (if any)
 .docker/
+
+# LLM / AI tools
+.claude/
+CLAUDE.md
+.cursor/
+.copilot/

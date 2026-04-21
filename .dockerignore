@@ -40,9 +40,24 @@
 # Ignore CI service files.
 /.github
 
-# Ignore development files
+# Ignore development files.
 /.devcontainer
 
-# Ignore Docker-related files
+# Ignore Docker-related files.
 /.dockerignore
 /Dockerfile*
+/docker-compose*.yml
+
+# Ignore test and spec files.
+/spec
+/test
+
+# Ignore linting config.
+/.rubocop*
+
+# Ignore Procfiles.
+/Procfile*
+
+# Ignore LLM / AI tools.
+.claude/
+CLAUDE.md

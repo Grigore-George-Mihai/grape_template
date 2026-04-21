@@ -38,7 +38,7 @@ module ErrorHandler
     # Catch-all for unexpected errors
     rescue_from :all do |e|
       Rollbar.error(e) if defined?(Rollbar)
-      error!({ errors: { status: I18n.t("errors.status.internal_server_error"), message: e.message } }, 500)
+      error!({ errors: { status: I18n.t("errors.status.internal_server_error") } }, 500)
     end
   end
 end

@@ -4,7 +4,7 @@ gem "bcrypt", "~> 3.1.7"
 gem "bootsnap", require: false
 gem "jwt"
 gem "pagy"
-gem "pg", "~> 1.1"
+gem "pg", "~> 1.5"
 gem "puma", ">= 5.0"
 gem "rails", "~> 7.2"
 gem "redis"
@@ -28,6 +28,7 @@ gem "scout_apm"
 group :development, :test do
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
   gem "dotenv-rails"
+  gem "minitest", "< 6"
   gem "sprockets-rails"
 
   # Code Quality & Linting
